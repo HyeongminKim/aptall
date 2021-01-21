@@ -162,21 +162,21 @@ else
     echo -e "\033[32mInitiated time: $(date)\033[m"
 fi
 
-apt update 2> $debugPath/apt_update_debug.log
+sudo apt update 2> $debugPath/apt_update_debug.log
 if [ "$?" != "0" ]; then
     update=true
     cat $debugPath/apt_update_debug.log
 else
     rm $debugPath/apt_update_debug.log
 fi
-apt upgrade 2> $debugPath/apt_upgrade_debug.log
+sudo apt upgrade 2> $debugPath/apt_upgrade_debug.log
 if [ "$?" != "0" ]; then
     upgrade=true
     cat $debugPath/apt_upgrade_debug.log
 else
     rm $debugPath/apt_upgrade_debug.log
 fi
-apt autoremove -s 2> $debugPath/apt_autoremove_debug.log
+sudo apt autoremove -s 2> $debugPath/apt_autoremove_debug.log
 if [ "$?" != "0" ]; then
     cleanup=true
     cat $debugPath/apt_autoremove_debug.log
