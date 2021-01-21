@@ -16,7 +16,7 @@
     ```
     chmod 755 foo.sh
     ```
-### Usage: aptall.sh \[command\] \[option\]
+### Usage: aptall.sh \[command\]
 - version: Print this script version and environment version. 
 - runtime: Print previous aptall launch time. 
 - changelog: View update changes
