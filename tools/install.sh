@@ -54,7 +54,8 @@ if [ "$1" == "install" ]; then
             exit 1
         fi
 
-        mkdir /etc/aptall 
+        sudo mkdir /etc/aptall 
+        sudo chown -R $(whoami) /etc/aptall
         touch /etc/aptall/initializationed
         if [ $LANG == "ko_KR.UTF-8" ]; then
             echo -e "aptall 설정 폴더를 생성하였습니다. 설정 폴더는 \033[0;1m/etc/aptall/initializationed\033[m에 위치할 것입니다. "
@@ -66,7 +67,8 @@ if [ "$1" == "install" ]; then
     if [ -d $debugPath ]; then
         echo "" > /dev/null
     else
-        mkdir /var/log/aptall 
+        sudo mkdir /var/log/aptall 
+        sudo chown -R $(whoami) /var/log/aptall
         if [ $LANG == "ko_KR.UTF-8" ]; then
             echo -e "aptall 로그 폴더를 생성하였습니다. 모든 로그 파일들은 \033[0;1m$debugPath\033[m에 위치할 것입니다. "
         else

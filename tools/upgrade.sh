@@ -11,7 +11,8 @@ function showCommit() {
     if [ -d $releasePath ]; then
         echo "" > /dev/null
     else
-        mkdir /var/log/aptall
+        sudo mkdir /var/log/aptall
+        sudo chown -R $(whoami) /var/log/aptall
         dirCreated=true
     fi
     if [ $LANG == "ko_KR.UTF-8" ]; then
