@@ -43,9 +43,9 @@ elif [ x$1 == x ]; then
 elif [ "$1" == "help" ]; then
     xdg-open https://github.com/HyeongminKim/aptall\#usage-aptallsh-command-option
     if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo "사용법: $0 [명령] [옵션]"
+        echo "사용법: $0 [명령]"
     else
-        echo "USAGE: $0 [COMMAND] [OPTION]"
+        echo "USAGE: $0 [COMMAND]"
     fi
     exit 0
 else
