@@ -144,9 +144,9 @@ if [ -x $executePath/tools/install.sh ]; then
     fi
 else
     if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo -e "\033[31m의존성 패키지가 제대로 설치되어 있는지 확인할 수 없어 종료합니다. \033[m"
+        echo -e "\033[31m설정 및 로그 폴더가 존재하는지 확인할 수 없으므로 종료합니다. \033[m"
     else
-        echo -e "\033[31mExited because dependency package couldn't be verified.\033[m"
+        echo -e "\033[31mExit because it is not possible to check whether the settings and log folder exist.\033[m"
     fi
     exit 1
 fi
