@@ -17,7 +17,7 @@ if [ "$1" == "version" ]; then
     echo ""
     git --version
     exit 0
-elif [ "$1" == "runtime" ]; then
+elif [ "$1" == "runtime" ]; then 
     if [ -r $debugPath/aptall_initiated.log ]; then
         cat $debugPath/aptall_initiated.log 2> /dev/null
     fi
