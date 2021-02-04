@@ -32,6 +32,7 @@
 |aptall.sh|This script is a root script, please only start with this script. (If you run it with another script, it will not work properly.)|
 |tools/install.sh|Initial setup and required packages are installed. If the requirements are not met during the check, this script will assist you with the installation.|
 |tools/upgrade.sh|Update the locally installed aptall repository to the latest version. See [here](https://github.com/HyeongminKim/aptall\#update-channels) how to change channels.|
+|tools/changelog.sh|A script that prints out changes according to the format when the update is successful.|
 |tools/extension.sh|Allows the user to write additional shell scripts, which is optional.|
 
 ### License
