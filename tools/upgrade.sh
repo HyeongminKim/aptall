@@ -5,6 +5,7 @@ last_commit=$(git rev-parse HEAD)
 last_version=$(git rev-parse --short HEAD)
 dirCreated=false
 cntBranch=$(git branch | sed '/* /!d'| sed 's/* //g')
+executePath=$1
 
 function showCommit() {
     releasePath=/var/log/aptall
@@ -15,65 +16,10 @@ function showCommit() {
         sudo chown -R $(whoami) /var/log/aptall
         dirCreated=true
     fi
-    if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo -e "\033[0;1m업데이트 채널\033[m" > $releasePath/releasenote.txt
-    else
-        echo -e "\033[0;1mUpdate channel\033[m" > $releasePath/releasenote.txt
-    fi
-    echo -e "\033[0;4m$cntBranch\033[m\n" >> $releasePath/releasenote.txt
 
-    if [ -z "$(git log -1 --grep="ADD" --no-merges --pretty=format:"%h" $updated_commit...$last_commit)" ]; then
-        echo "" > /dev/null
-    else
-        if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "\033[0;1m새로운 기능\033[m" >> $releasePath/releasenote.txt
-        else
-            echo -e "\033[0;1mNew features\033[m" >> $releasePath/releasenote.txt
-        fi
-        git log --stat --color --grep="ADD" --no-merges --pretty=format:"%C(magenta)%h%Creset - %C(cyan)%an%Creset [%C(red)%ar%Creset]: %C(green)%s%Creset" $updated_commit...$last_commit >> $releasePath/releasenote.txt
-        echo "" >> $releasePath/releasenote.txt
-    fi
-
-    if [ -z "$(git log -1 --grep="UPDATE" --no-merges --pretty=format:"%h" $updated_commit...$last_commit)" ]; then
-        echo "" > /dev/null
-    else
-        if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "\033[0;1m업데이트된 기능\033[m" >> $releasePath/releasenote.txt
-        else
-            echo -e "\033[0;1mUpdated features\033[m" >> $releasePath/releasenote.txt
-        fi
-        git log --stat --color --grep="UPDATE" --no-merges --pretty=format:"%C(magenta)%h%Creset - %C(cyan)%an%Creset [%C(red)%ar%Creset]: %C(green)%s%Creset" $updated_commit...$last_commit >> $releasePath/releasenote.txt
-        echo "" >> $releasePath/releasenote.txt
-    fi
-
-    if [ -z "$(git log -1 --grep="DELETE" --no-merges --pretty=format:"%h" $updated_commit...$last_commit)" ]; then
-        echo "" > /dev/null
-    else
-        if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "\033[0;1m삭제된 기능\033[m" >> $releasePath/releasenote.txt
-        else
-            echo -e "\033[0;1mRemoved features\033[m" >> $releasePath/releasenote.txt
-        fi
-        git log --stat --color --grep="DELETE" --no-merges --pretty=format:"%C(magenta)%h%Creset - %C(cyan)%an%Creset [%C(red)%ar%Creset]: %C(green)%s%Creset" $updated_commit...$last_commit >> $releasePath/releasenote.txt
-        echo "" >> $releasePath/releasenote.txt
-    fi
-
-    if [ "$(git branch | sed '/* /!d'| sed 's/* //g')" == "nightly" ]; then
-        if [ -z "$(git log -1 --grep="TEST" --no-merges --pretty=format:"%h" $updated_commit...$last_commit)" ]; then
-            echo "" > /dev/null
-        else
-            if [ $LANG == "ko_KR.UTF-8" ]; then
-                echo -e "\033[0;1m실험중인 기능\033[m" >> $releasePath/releasenote.txt
-            else
-                echo -e "\033[0;1mTesting features\033[m" >> $releasePath/releasenote.txt
-            fi
-            git log --stat --color --grep="TEST" --no-merges --pretty=format:"%C(magenta)%h%Creset - %C(cyan)%an%Creset [%C(red)%ar%Creset]: %C(green)%s%Creset" $updated_commit...$last_commit >> $releasePath/releasenote.txt
-            echo "" >> $releasePath/releasenote.txt
-        fi
-    fi
-
-    # less -R $releasePath/releasenote.txt
-    cat $releasePath/releasenote.txt
+    "$executePath/tools/changelog.sh" "$executePath" "$1" "$2"
+    echo $1 > $releasePath/cntRevision.txt
+    echo $2 > $releasePath/updatedRevision.txt
 }
 
 function donation() {
@@ -103,7 +49,7 @@ if git pull --rebase --stat origin $cntBranch; then
         exit 0
     else
         updated_version=$(git rev-parse --short HEAD)
-        showCommit
+        showCommit "$last_commit" "$updated_commit"
         if [ $LANG == "ko_KR.UTF-8" ]; then
             echo -e "\033[34maptall이 성공적으로 업데이트 되었습니다.\033[m"
             if [ $dirCreated == false ]; then
