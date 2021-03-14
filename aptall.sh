@@ -236,6 +236,12 @@ if [ "$update" = true -o "$upgrade" = true -o "$cleanup" = true -o "$doctor" = t
                 echo "[31m[FAILED][0m " >> $debugPath/aptall_initiated.log
             fi
         fi
+    else
+        if [ $LANG == "ko_KR.UTF-8" ]; then
+            echo -e "추가 명령을 실행하고 싶으시면 extension.sh 파일을 \033[0;1m$executePath/tools\033[m 디렉토리 안에 두심시오. "
+        else
+            echo -e "If you want to run additional commands, place the extension.sh file in the \033[0;1m$executePath/tools\033[m directory."
+        fi
     fi
     endTime=$(date +%s)
     if [ $LANG == "ko_KR.UTF-8" ]; then
@@ -288,6 +294,11 @@ else
             exit 1
         fi
     else
+        if [ $LANG == "ko_KR.UTF-8" ]; then
+            echo -e "추가 명령을 실행하고 싶으시면 extension.sh 파일을 \033[0;1m$executePath/tools\033[m 디렉토리 안에 두심시오. "
+        else
+            echo -e "If you want to run additional commands, place the extension.sh file in the \033[0;1m$executePath/tools\033[m directory."
+        fi
         if [ $LANG == "ko_KR.UTF-8" ]; then
             echo "[34m[성공][0m " >> $debugPath/aptall_initiated.log
         else
