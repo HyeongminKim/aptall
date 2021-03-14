@@ -10,7 +10,8 @@ executePath=$(echo $0 | sed "s/\/aptall.sh//g")
 
 if [ "$1" == "version" ]; then
     cd $executePath
-    echo -e "aptall (git revision $(git rev-parse --short HEAD), last commit $(git log -1 --date=format:"%Y-%m-%d" --format="%ad"))\nCopyright (c) 2021 Hyeongmin Kim\n"
+    echo -e "aptall (git revision $(git rev-parse --short HEAD), last commit $(git log -1 --date=format:"%Y-%m-%d" --format="%ad"), $(git branch | sed '/* /!d'| sed 's/* //g') build)"
+    echo -e "Copyright (c) 2021 Hyeongmin Kim\n"
     bash --version
     echo ""
     apt --version
