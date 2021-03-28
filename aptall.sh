@@ -8,8 +8,9 @@ doctor=false
 elapsedTime=
 executePath=$(echo $0 | sed "s/\/aptall.sh//g")
 
+cd $executePath
+
 if [ "$1" == "version" ]; then
-    cd $executePath
     echo -e "aptall (git revision $(git rev-parse --short HEAD), last commit $(git log -1 --date=format:"%Y-%m-%d" --format="%ad"), $(git branch | sed '/* /!d'| sed 's/* //g') build)"
     echo -e "Copyright (c) 2021 Hyeongmin Kim\n"
     bash --version
@@ -28,7 +29,7 @@ elif [ "$1" == "changelog" ]; then
         cntRevision="$(cat $debugPath/cntRevision.txt)"
         updatedRevision="$(cat $debugPath/updatedRevision.txt)"
 
-        "$executePath/tools/changelog.sh" "$executePath" "$cntRevision" "$updatedRevision"
+        "$executePath/tools/changelog.sh" "$cntRevision" "$updatedRevision"
     fi
     exit 0
 elif [ "$1" == "remove" ]; then
