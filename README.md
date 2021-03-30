@@ -9,6 +9,13 @@
     ```
     git clone https://github.com/HyeongminKim/aptall.git [destination]
     ```
+- Please add below command to your default shell config file
+
+    ```
+    aptall() {
+      <shell script destination> $@
+    }
+    ```
 - Now enjoy it
 ### Trouble shooting
 - If you see the **permission denied** error message run command like below.
