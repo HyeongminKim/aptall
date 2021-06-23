@@ -2,9 +2,32 @@
 ## This shell script helps you update your apt package manager.
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/hmDonate)
 ### Installation
+##### Linux
 - [Download](https://github.com/HyeongminKim/aptall/archive/master.zip) the latest version of aptall package.
     - Place the aptall package where you want it.
 - Or in terminal run below command.
+
+    ```
+    git clone https://github.com/HyeongminKim/aptall.git [destination]
+    ```
+- Please add below command to your default shell config file
+
+    ```
+    aptall() {
+      <shell script destination> $@
+    }
+    ```
+- Now enjoy it
+##### Windows
+- First run Turn Windows features on or off and then check Windows Subsystem for Linux.
+- [Install](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6?activetab=pivot:overviewtab) Ubuntu Terminal from Microsoft Store.
+- After launching Ubuntu Terminal, run the following command.
+
+    ```
+    git config --global core.eol lf
+    git config --global core.autocrlf input
+    ```
+- Clone the repository after running the above command.
 
     ```
     git clone https://github.com/HyeongminKim/aptall.git [destination]
@@ -23,6 +46,7 @@
     ```
     chmod 755 foo.sh
     ```
+- If you see the **'\r': command not found** error Please follow [this](https://github.com/HyeongminKim/aptall\#windows) guide.
 ### Usage: aptall.sh \[command\]
 - version: Print this script version and environment version. 
 - runtime: Print previous aptall launch time. 
