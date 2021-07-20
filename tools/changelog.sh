@@ -1,7 +1,7 @@
 #!/bin/bash
 
-beforeCommit="$2"
-updatedCommit="$3"
+beforeCommit="$1"
+updatedCommit="$2"
 executePath=$(echo $0 | sed "s/\/tools\/changelog.sh//g")
 cntBranch=$(git branch | sed '/* /!d'| sed 's/* //g')
 releasePath=/var/log/aptall
