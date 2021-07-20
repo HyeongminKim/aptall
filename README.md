@@ -1,6 +1,9 @@
 # aptall
 ## This shell script helps you update your apt package manager.
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/hmDonate)
+
+https://user-images.githubusercontent.com/25660580/126312442-b44e7174-e1f6-49a5-9268-6b59450a7057.mp4
+
 ### Installation
 ##### Linux
 - [Download](https://github.com/HyeongminKim/aptall/archive/master.zip) the latest version of aptall package.
