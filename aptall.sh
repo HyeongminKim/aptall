@@ -177,7 +177,7 @@ if [ "$?" != "0" ]; then
 else
     rm $debugPath/apt_update_debug.log
 fi
-sudo apt upgrade 2> $debugPath/apt_upgrade_debug.log
+sudo apt -y upgrade 2> $debugPath/apt_upgrade_debug.log
 if [ "$?" != "0" ]; then
     upgrade=true
     cat $debugPath/apt_upgrade_debug.log
