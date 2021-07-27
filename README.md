@@ -22,7 +22,10 @@ https://user-images.githubusercontent.com/25660580/126312442-b44e7174-e1f6-49a5-
     ```
 - Now enjoy it
 ##### Windows
-- First run Turn Windows features on or off and then check Windows Subsystem for Linux.
+- First run "Turn Windows features on or off" and then check "Windows Subsystem for Linux". Alternatively, run the following command in Powershell.
+    ```PowerShell
+    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+    ```
 - [Install](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6?activetab=pivot:overviewtab) Ubuntu Terminal from Microsoft Store.
 - After launching Ubuntu Terminal, run the following command.
 
