@@ -76,7 +76,7 @@ function calcTime() {
     resultCalculatedMin=$(($calculatedElapsedSecond/60))
     calculatedElapsedSecond=$(($calculatedElapsedSecond%60))
     resultCalculatedSec=$calculatedElapsedSecond
-    echo -n "$resultCalculatedHour:$resultCalculatedMin'$resultCalculatedSec\" "
+    echo -n "$resultCalculatedHour°$resultCalculatedMin'$resultCalculatedSec\" "
 }
 
 function compareTime() {
