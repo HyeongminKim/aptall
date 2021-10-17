@@ -70,7 +70,7 @@ https://user-images.githubusercontent.com/25660580/126312442-b44e7174-e1f6-49a5-
 |tools/install.sh|Initial setup and required packages are installed. If the requirements are not met during the check, this script will assist you with the installation.|
 |tools/upgrade.sh|Update the locally installed aptall repository to the latest version. See [here](https://github.com/HyeongminKim/aptall\#update-channels) how to change channels.|
 |tools/changelog.sh|A script that prints out changes according to the format when the update is successful.|
-|tools/extension.sh|Allows the user to write additional shell scripts, which is optional.|
+|tools/extension.sh|Allows the user to write additional shell scripts, which is optional. ([example file](https://raw.githubusercontent.com/HyeongminKim/Developer/master/Shellscript/Linux/extension.sh))|
 
 ### License
 This work is licensed under a [MIT License](https://github.com/HyeongminKim/aptall/blob/master/LICENSE).
