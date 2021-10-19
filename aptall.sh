@@ -175,6 +175,17 @@ function extensionVerification {
     done
 }
 
+if [ -r $debugPath/aptall.lock ]; then
+    if [ $LANG == "ko_KR.UTF-8" ]; then
+        echo -e "\033[31m의존성 패키지를 검증할 수 없기 때문에 종료되었습니다.\033[m"
+    else
+        echo -e "\033[31mExited because dependency package couldn't be verified.\033[m"
+    fi
+    exit 1
+else
+    touch $debugPath/aptall.lock
+fi
+
 startTime=$(date +%s)
 
 ping -c 1 -W 1 -q "www.google.com" &> /dev/null
@@ -208,6 +219,7 @@ fi
 if [ -x $executePath/tools/install.sh ]; then
     "$executePath/tools/install.sh" "install"
     if [ $? != 0 ]; then
+        rm $debugPath/aptall.lock
         exit $?
     fi
 else
@@ -216,6 +228,7 @@ else
     else
         echo -e "\033[31mExit because it is not possible to check whether the settings and log folder exist.\033[m"
     fi
+    rm $debugPath/aptall.lock
     exit 1
 fi
 
@@ -313,6 +326,7 @@ if [ "$update" = true -o "$upgrade" = true -o "$cleanup" = true -o "$doctor" = t
     fi
     calcTime $endTime $startTime
     compareTime
+    rm $debugPath/aptall.lock
     exit 1
 else
     if [ $LANG == "ko_KR.UTF-8" ]; then
@@ -336,6 +350,7 @@ else
             fi
             calcTime $endTime $startTime
             compareTime
+            rm $debugPath/aptall.lock
             exit 0
         else
             if [ $LANG == "ko_KR.UTF-8" ]; then
@@ -353,6 +368,7 @@ else
             fi
             calcTime $endTime $startTime
             compareTime
+            rm $debugPath/aptall.lock
             exit 1
         fi
     else
@@ -374,6 +390,7 @@ else
         fi
         calcTime $endTime $startTime
         compareTime
+        rm $debugPath/aptall.lock
         exit 0
     fi
 fi
