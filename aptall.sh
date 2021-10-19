@@ -115,6 +115,57 @@ function compareTime() {
 
 }
 
+function executeExtension() {
+    if [ -r $debugPath/extension.csm ]; then
+        shasum -a 256 $executePath/tools/extension.sh > $debugPath/extension_src.csm
+        diff $debugPath/extension.csm $debugPath/extension_src.csm > /dev/null
+        if [ $? != 0 ]; then
+            extensionVerification
+        else
+            "$executePath/tools/extension.sh"
+        fi
+        rm $debugPath/extension_src.csm
+    else
+        extensionVerification
+    fi
+}
+
+function extensionVerification {
+    if [ $LANG == "ko_KR.UTF-8" ]; then
+        echo "extension.sh 체크섬: $(shasum -a 256 $executePath/tools/extension.sh)"
+    else
+        echo "extension.sh checksum: $(shasum -a 256 $executePath/tools/extension.sh)"
+    fi
+    while true; do
+        if [ $LANG == "ko_KR.UTF-8" ]; then
+            echo -n "실행할 작업(y: 실행, n: 중단, d: 훓어보기) > "
+        else
+            echo -n "Action to run(y: execute, n: abort, d: quicklook) > "
+        fi
+        read input
+        if [ "$input" == "y" -o "$input" == "Y" ]; then
+            shasum -a 256 $executePath/tools/extension.sh > $debugPath/extension.csm
+            "$executePath/tools/extension.sh"
+            break
+        elif [ "$input" == "n" -o "$input" == "N" ]; then
+            if [ $LANG == "ko_KR.UTF-8" ]; then
+                echo "사용자가 extension.sh 파일 실행을 중단했습니다. "
+            else
+                echo "User aborted extension.sh file execution."
+            fi
+            break
+        elif [ "$input" == "d" -o "$input" == "D" ]; then
+            less $executePath/tools/extension.sh
+        else
+            if [ $LANG == "ko_KR.UTF-8" ]; then
+                echo "알 수 없는 명령 $input 무시됨"
+            else
+                echo "Unknown command $input Skipping"
+            fi
+        fi
+    done
+}
+
 startTime=$(date +%s)
 
 ping -c 1 -W 1 -q "www.google.com" &> /dev/null
@@ -228,7 +279,7 @@ if [ "$update" = true -o "$upgrade" = true -o "$cleanup" = true -o "$doctor" = t
         echo "[31m[FAILED][0m " >> $debugPath/aptall_initiated.log
     fi
     if [ -x $executePath/tools/extension.sh ]; then
-        "$executePath/tools/extension.sh"
+        executeExtension
         if [ $? != 0 ]; then
             if [ $LANG == "ko_KR.UTF-8" ]; then
                 echo -e "\033[31m익스텐션을 로드하는 도중 에러가 발생하였습니다. \033[m"
@@ -261,7 +312,7 @@ else
         echo -e "\033[34maptall has successful.\033[m"
     fi
     if [ -x $executePath/tools/extension.sh ]; then
-        "$executePath/tools/extension.sh"
+        executeExtension
         if [ $? == 0 ]; then
             if [ $LANG == "ko_KR.UTF-8" ]; then
                 echo "[34m[성공][0m " >> $debugPath/aptall_initiated.log
