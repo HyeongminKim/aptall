@@ -145,6 +145,7 @@ function extensionVerification {
         read input
         if [ "$input" == "y" -o "$input" == "Y" ]; then
             shasum -a 256 $executePath/tools/extension.sh > $debugPath/extension.csm
+            cp $executePath/tools/extension.sh $debugPath/extension.sh.bak
             "$executePath/tools/extension.sh"
             break
         elif [ "$input" == "n" -o "$input" == "N" ]; then
@@ -155,7 +156,15 @@ function extensionVerification {
             fi
             break
         elif [ "$input" == "d" -o "$input" == "D" ]; then
-            less $executePath/tools/extension.sh
+            if [ -r $debugPath/extension.sh.bak ]; then
+                cat $executePath/tools/extension.sh > $debugPath/extension.txt
+                cat $debugPath/extension.sh.bak > $debugPath/extension_bak.txt
+                git diff --no-index $debugPath/extension_bak.txt $debugPath/extension.txt
+
+                rm $debugPath/extension.txt $debugPath/extension_bak.txt
+            else
+                less $executePath/tools/extension.sh
+            fi
         else
             if [ $LANG == "ko_KR.UTF-8" ]; then
                 echo "알 수 없는 명령 $input 무시됨"
