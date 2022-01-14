@@ -250,13 +250,29 @@ if [ "$?" != "0" ]; then
 else
     rm $debugPath/apt_update_debug.log
 fi
-sudo apt -y upgrade 2> $debugPath/apt_upgrade_debug.log
-if [ "$?" != "0" ]; then
-    upgrade=true
-    cat $debugPath/apt_upgrade_debug.log
+if [ "$USE_FULL_UPGRADE" == "true" -o "$USE_FULL_UPGRADE" == "TRUE" ]; then
+    if [ $LANG == "ko_KR.UTF-8" ]; then
+        echo -e "\033[33m이 옵션을 사용할 경우 디바이스 저장공간이 부족할 수 있습니다. \033[m"
+    else
+        echo -e "\033[33mIf you use this option, your device may run out of storage space.\033[m"
+    fi
+    sudo apt full-upgrade 2> $debugPath/apt_upgrade_debug.log
+    if [ "$?" != "0" ]; then
+        upgrade=true
+        cat $debugPath/apt_upgrade_debug.log
+    else
+        rm $debugPath/apt_upgrade_debug.log
+    fi
 else
-    rm $debugPath/apt_upgrade_debug.log
+    sudo apt -y upgrade 2> $debugPath/apt_upgrade_debug.log
+    if [ "$?" != "0" ]; then
+        upgrade=true
+        cat $debugPath/apt_upgrade_debug.log
+    else
+        rm $debugPath/apt_upgrade_debug.log
+    fi
 fi
+
 sudo apt autoremove -s 2> $debugPath/apt_autoremove_debug.log
 if [ "$?" != "0" ]; then
     cleanup=true
