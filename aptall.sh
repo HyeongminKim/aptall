@@ -273,7 +273,7 @@ else
     fi
 fi
 
-sudo apt -y autoremove -s 2> $debugPath/apt_autoremove_debug.log
+sudo apt -y autoremove 2> $debugPath/apt_autoremove_debug.log
 if [ "$?" != "0" ]; then
     cleanup=true
     cat $debugPath/apt_autoremove_debug.log
