@@ -6,9 +6,9 @@ versionChecked=false
 
 if [ "$(uname -s)" != "Linux" ]; then
     if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo -e "\033[31m$(uname -s) 는 아직 지원하지 않습니다. \033[m"
+        echo -e "\e[31m$(uname -s) 는 아직 지원하지 않습니다. \e[m"
     else
-        echo -e "\033[31m$(uname -s) does not support yet.\033[m"
+        echo -e "\e[31m$(uname -s) does not support yet.\e[m"
     fi
     exit 1
 fi
@@ -25,9 +25,9 @@ function checkVersion() {
         exit 1
     else
         if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "\033[33m변경 사항을 적용하기 위해 다시 실행하여 주세요. \033[m"
+            echo -e "\e[33m변경 사항을 적용하기 위해 다시 실행하여 주세요. \e[m"
         else
-            echo -e "\033[33mPlease run again to apply the changes.\033[m"
+            echo -e "\e[33mPlease run again to apply the changes.\e[m"
         fi
         exit 2
     fi
@@ -58,9 +58,9 @@ if [ "$1" == "install" ]; then
         sudo chown -R $(whoami) /etc/aptall
         touch /etc/aptall/initializationed
         if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "aptall 설정 폴더를 생성하였습니다. 설정 폴더는 \033[0;1m/etc/aptall/initializationed\033[m에 위치할 것입니다. "
+            echo -e "aptall 설정 폴더를 생성하였습니다. 설정 폴더는 \e[0;1m/etc/aptall/initializationed\e[m에 위치할 것입니다. "
         else
-            echo -e "aptall config folder created. This config folder path is \033[0;1m/etc/aptall/initializationed\033[m"
+            echo -e "aptall config folder created. This config folder path is \e[0;1m/etc/aptall/initializationed\e[m"
         fi
     fi
 
@@ -70,9 +70,9 @@ if [ "$1" == "install" ]; then
         sudo mkdir /var/log/aptall 
         sudo chown -R $(whoami) /var/log/aptall
         if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "aptall 로그 폴더를 생성하였습니다. 모든 로그 파일들은 \033[0;1m$debugPath\033[m에 위치할 것입니다. "
+            echo -e "aptall 로그 폴더를 생성하였습니다. 모든 로그 파일들은 \e[0;1m$debugPath\e[m에 위치할 것입니다. "
         else
-            echo -e "aptall log folder created. All logs file are located in \033[0;1m$debugPath\033[m"
+            echo -e "aptall log folder created. All logs file are located in \e[0;1m$debugPath\e[m"
         fi
     fi
 elif [ "$1" == "uninstall" ]; then

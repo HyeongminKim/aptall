@@ -37,9 +37,9 @@ elif [ "$1" == "remove" ]; then
         "$executePath/tools/install.sh" "uninstall"
     else
         if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "\033[31m언인스톨러를 실행할 권한이 없습니다. \033[m"
+            echo -e "\e[31m언인스톨러를 실행할 권한이 없습니다. \e[m"
         else
-            echo -e "\033[31mCan't run uninstaller, Please change permission.\033[m"
+            echo -e "\e[31mCan't run uninstaller, Please change permission.\e[m"
         fi
     fi
     exit $?
@@ -86,16 +86,16 @@ function compareTime() {
         if [ $previousElapsedTime -gt $currentElapsedTime ]; then
             result=$(($previousElapsedTime-$currentElapsedTime))
             if [ $LANG == "ko_KR.UTF-8" ]; then
-                echo -e "\033[34m▼ $result 초\033[m"
+                echo -e "\e[34m▼ $result 초\e[m"
             else
-                echo -e "\033[31m▼ $result sec\033[m"
+                echo -e "\e[31m▼ $result sec\e[m"
             fi
         elif [ $previousElapsedTime -lt $currentElapsedTime ]; then
             result=$(($currentElapsedTime-$previousElapsedTime))
             if [ $LANG == "ko_KR.UTF-8" ]; then
-                echo -e "\033[31m▲ $result 초\033[m"
+                echo -e "\e[31m▲ $result 초\e[m"
             else
-                echo -e "\033[32m▲ $result sec\033[m"
+                echo -e "\e[32m▲ $result sec\e[m"
             fi
         else
             if [ $LANG == "ko_KR.UTF-8" ]; then
@@ -177,9 +177,9 @@ function extensionVerification {
 
 if [ -r $debugPath/aptall.lock ]; then
     if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo -e "\033[31m의존성 패키지를 검증할 수 없기 때문에 종료되었습니다.\033[m"
+        echo -e "\e[31m의존성 패키지를 검증할 수 없기 때문에 종료되었습니다.\e[m"
     else
-        echo -e "\033[31mExited because dependency package couldn't be verified.\033[m"
+        echo -e "\e[31mExited because dependency package couldn't be verified.\e[m"
     fi
     exit 1
 else
@@ -191,9 +191,9 @@ startTime=$(date +%s)
 ping -c 1 -W 1 -q "www.google.com" &> /dev/null
 if [ "$?" != "0" ]; then
     if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo -en "\033[31m인터넷 연결 확인... "
+        echo -en "\e[31m인터넷 연결 확인... "
     else
-        echo -en "\033[31mCheck your internet connection... "
+        echo -en "\e[31mCheck your internet connection... "
     fi
     index=0
     spinner='/-\|'
@@ -207,9 +207,9 @@ if [ "$?" != "0" ]; then
         else
             printf '\b\b\b\b%s' " "
             if [ $LANG == "ko_KR.UTF-8" ]; then
-                echo -e "\033[32m연결됨\033[m"
+                echo -e "\e[32m연결됨\e[m"
             else
-                echo -e "\033[32mConnected\033[m"
+                echo -e "\e[32mConnected\e[m"
             fi
             break
         fi
@@ -224,9 +224,9 @@ if [ -x $executePath/tools/install.sh ]; then
     fi
 else
     if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo -e "\033[31m설정 및 로그 폴더가 존재하는지 확인할 수 없으므로 종료합니다. \033[m"
+        echo -e "\e[31m설정 및 로그 폴더가 존재하는지 확인할 수 없으므로 종료합니다. \e[m"
     else
-        echo -e "\033[31mExit because it is not possible to check whether the settings and log folder exist.\033[m"
+        echo -e "\e[31mExit because it is not possible to check whether the settings and log folder exist.\e[m"
     fi
     rm $debugPath/aptall.lock
     exit 1
@@ -237,10 +237,10 @@ if [ -r $debugPath/aptall_initiated.log ]; then
 fi
 if [ $LANG == "ko_KR.UTF-8" ]; then
     echo -n "[33m이전 시간: $(date)[0m " > $debugPath/aptall_initiated.log
-    echo -e "\033[32m시작 시간: $(date)\033[m"
+    echo -e "\e[32m시작 시간: $(date)\e[m"
 else
     echo -n "[33m Previous time: $(date)[0m " > $debugPath/aptall_initiated.log
-    echo -e "\033[32mInitiated time: $(date)\033[m"
+    echo -e "\e[32mInitiated time: $(date)\e[m"
 fi
 
 sudo apt update 2> $debugPath/apt_update_debug.log
@@ -252,9 +252,9 @@ else
 fi
 if [ "$USE_FULL_UPGRADE" == "true" -o "$USE_FULL_UPGRADE" == "TRUE" ]; then
     if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo -e "\033[33m이 옵션을 사용할 경우 디바이스 저장공간이 부족할 수 있습니다. \033[m"
+        echo -e "\e[33m이 옵션을 사용할 경우 디바이스 저장공간이 부족할 수 있습니다. \e[m"
     else
-        echo -e "\033[33mIf you use this option, your device may run out of storage space.\033[m"
+        echo -e "\e[33mIf you use this option, your device may run out of storage space.\e[m"
     fi
     sudo apt full-upgrade 2> $debugPath/apt_upgrade_debug.log
     if [ "$?" != "0" ]; then
@@ -285,23 +285,23 @@ if [ -x $executePath/tools/upgrade.sh ]; then
     "$executePath/tools/upgrade.sh" "$executePath"
 else
     if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo -e "\033[31m자동 업데이트 도중 에러가 발생하였습니다. 수동으로 진행하여 주세요\033[m"
+        echo -e "\e[31m자동 업데이트 도중 에러가 발생하였습니다. 수동으로 진행하여 주세요\e[m"
     else
-        echo -e "\033[31mAn error occurred during automatic update. By going manually\033[m"
+        echo -e "\e[31mAn error occurred during automatic update. By going manually\e[m"
     fi
     xdg-open https://github.com/HyeongminKim/aptall
 fi
 if [ "$update" = true -o "$upgrade" = true -o "$cleanup" = true -o "$doctor" = true ]; then
     logFiles=$(ls $debugPath |grep apt_ |grep -c debug.log)
     if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo -e "\033[31maptall이 실패했거나 경고가 발생하였습니다.\033[m\naptall 로그 파일이 \033[0;1m$debugPath\033[m 에 위치해 있습니다. "
+        echo -e "\e[31maptall이 실패했거나 경고가 발생하였습니다.\e[m\naptall 로그 파일이 \e[0;1m$debugPath\e[m 에 위치해 있습니다. "
         echo "----- apt 로그 목록 -----"
     else
         if [ $logFiles == 1 ]; then
-            echo -e "\033[31maptall has failed and/or occurred warning.\033[m\naptall log file located \033[0;1m$debugPath\033[m"
+            echo -e "\e[31maptall has failed and/or occurred warning.\e[m\naptall log file located \e[0;1m$debugPath\e[m"
             echo "----- apt log list -----"
         else
-            echo -e "\033[31maptall has failed and/or occurred warning.\033[m\naptall log files located \033[0;1m$debugPath\033[m"
+            echo -e "\e[31maptall has failed and/or occurred warning.\e[m\naptall log files located \e[0;1m$debugPath\e[m"
             echo "----- apt logs list -----"
         fi
     fi
@@ -320,18 +320,18 @@ if [ "$update" = true -o "$upgrade" = true -o "$cleanup" = true -o "$doctor" = t
         executeExtension
         if [ $? != 0 ]; then
             if [ $LANG == "ko_KR.UTF-8" ]; then
-                echo -e "\033[31m익스텐션을 로드하는 도중 에러가 발생하였습니다. \033[m"
+                echo -e "\e[31m익스텐션을 로드하는 도중 에러가 발생하였습니다. \e[m"
                 echo "[31m[실패][0m " >> $debugPath/aptall_initiated.log
             else
-                echo -e "\033[31mAn error occurred while loading the extension.\033[m"
+                echo -e "\e[31mAn error occurred while loading the extension.\e[m"
                 echo "[31m[FAILED][0m " >> $debugPath/aptall_initiated.log
             fi
         fi
     else
         if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "추가 명령을 실행하고 싶으시면 extension.sh 파일을 \033[0;1m$executePath/tools\033[m 디렉토리 안에 두심시오. "
+            echo -e "추가 명령을 실행하고 싶으시면 extension.sh 파일을 \e[0;1m$executePath/tools\e[m 디렉토리 안에 두심시오. "
         else
-            echo -e "If you want to run additional commands, place the extension.sh file in the \033[0;1m$executePath/tools\033[m directory."
+            echo -e "If you want to run additional commands, place the extension.sh file in the \e[0;1m$executePath/tools\e[m directory."
         fi
     fi
     endTime=$(date +%s)
@@ -346,9 +346,9 @@ if [ "$update" = true -o "$upgrade" = true -o "$cleanup" = true -o "$doctor" = t
     exit 1
 else
     if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo -e "\033[34maptall 이 성공하였습니다.\033[m"
+        echo -e "\e[34maptall 이 성공하였습니다.\e[m"
     else
-        echo -e "\033[34maptall has successful.\033[m"
+        echo -e "\e[34maptall has successful.\e[m"
     fi
     if [ -x $executePath/tools/extension.sh ]; then
         executeExtension
@@ -370,10 +370,10 @@ else
             exit 0
         else
             if [ $LANG == "ko_KR.UTF-8" ]; then
-                echo -e "\033[31m익스텐션을 로드하는 도중 에러가 발생하였습니다. \033[m"
+                echo -e "\e[31m익스텐션을 로드하는 도중 에러가 발생하였습니다. \e[m"
                 echo "[31m[실패][0m " >> $debugPath/aptall_initiated.log
             else
-                echo -e "\033[31mAn error occurred while loading the extension.\033[m"
+                echo -e "\e[31mAn error occurred while loading the extension.\e[m"
                 echo "[31m[FAILED][0m " >> $debugPath/aptall_initiated.log
             fi
             endTime=$(date +%s)
@@ -389,9 +389,9 @@ else
         fi
     else
         if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "추가 명령을 실행하고 싶으시면 extension.sh 파일을 \033[0;1m$executePath/tools\033[m 디렉토리 안에 두심시오. "
+            echo -e "추가 명령을 실행하고 싶으시면 extension.sh 파일을 \e[0;1m$executePath/tools\e[m 디렉토리 안에 두심시오. "
         else
-            echo -e "If you want to run additional commands, place the extension.sh file in the \033[0;1m$executePath/tools\033[m directory."
+            echo -e "If you want to run additional commands, place the extension.sh file in the \e[0;1m$executePath/tools\e[m directory."
         fi
         if [ $LANG == "ko_KR.UTF-8" ]; then
             echo "[34m[성공][0m " >> $debugPath/aptall_initiated.log
