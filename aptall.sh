@@ -243,6 +243,24 @@ else
     echo -e "\e[32mInitiated time: $(date)\e[m"
 fi
 
+if [ $LANG == "ko_KR.UTF-8" ]; then
+    echo "스크립트를 계속 진행하려면 관리자 암호가 필요합니다. "
+else
+    echo "An admin password is required to proceed with the script. "
+fi
+sudo echo "" &> /dev/null
+if [ $? != 0 ]; then
+    if [ $LANG == "ko_KR.UTF-8" ]; then
+        echo -e "\e[31m로그인에 실패하였습니다. 잠시후 다시 시도하세요. \e[m"
+        echo "[31m[실패][0m " >> $debugPath/aptall_initiated.log
+    else
+        echo -e "\e[31mlogin failed. Please try again later.\e[m"
+        echo "[31m[FAILED][0m " >> $debugPath/aptall_initiated.log
+    fi
+    rm $debugPath/aptall.lock
+    exit 1
+fi
+
 sudo apt update 2> $debugPath/apt_update_debug.log
 if [ "$?" != "0" ]; then
     update=true
