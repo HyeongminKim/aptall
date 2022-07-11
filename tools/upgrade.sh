@@ -64,6 +64,19 @@ if git pull --rebase --stat origin $cntBranch; then
         donation
         if [ $dirCreated == true ]; then
             rm -rf /var/log/aptall
+        elif [ "$cntBranch" == "nightly" ]; then
+            if [ $LANG == "ko_KR.UTF-8" ]; then
+                echo -e "\e[33m경고: nightly 채널은 불안정합니다. 이 채널을 사용할 경우 예기치 않은 동작 또는 파일 유실, 더미 파일 생성 등이 나타날 수 있습니다.\e[m"
+                echo -n "권장 채널로 변경하시겠습니까? (Y/n) > "
+            else
+                echo -e "\e[33mWarning: The nightly channel is unstable. Using this channel can lead to unexpected behavior or loss of files, dummy file creation, etc.\e[m"
+                echo -n "Would you like to change to the recommended channel? (Y/n) > "
+            fi
+            read n
+            if ! [ "$n" == "n" -o "$n" == "N" ]; then
+                git remote update
+                git checkout -t origin/master
+            fi
         fi
         exit 2
     fi
