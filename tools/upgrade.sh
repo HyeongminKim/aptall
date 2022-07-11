@@ -10,9 +10,7 @@ cd $executePath
 
 function showCommit() {
     releasePath=/var/log/aptall
-    if [ -d $releasePath ]; then
-        echo "" > /dev/null
-    else
+    if [ ! -d $releasePath ]; then
         sudo mkdir /var/log/aptall
         sudo chown -R $(whoami) /var/log/aptall
         dirCreated=true

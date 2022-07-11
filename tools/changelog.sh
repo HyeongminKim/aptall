@@ -35,9 +35,7 @@ if [ "$cntBranch" == "nightly" ]; then
     fi
 fi
 
-if [ -z "$(git log -1 --grep="ADD" --no-merges --pretty=format:"%h" $updatedCommit...$beforeCommit)" ]; then
-    echo "" > /dev/null
-else
+if ! [ -z "$(git log -1 --grep="ADD" --no-merges --pretty=format:"%h" $updatedCommit...$beforeCommit)" ]; then
     if [ $LANG == "ko_KR.UTF-8" ]; then
         echo -e "\e[0;1m새로운 기능\e[m" >> $releasePath/releasenote.txt
     else
@@ -47,9 +45,7 @@ else
     echo "" >> $releasePath/releasenote.txt
 fi
 
-if [ -z "$(git log -1 --grep="UPDATE" --no-merges --pretty=format:"%h" $updatedCommit...$beforeCommit)" ]; then
-    echo "" > /dev/null
-else
+if ! [ -z "$(git log -1 --grep="UPDATE" --no-merges --pretty=format:"%h" $updatedCommit...$beforeCommit)" ]; then
     if [ $LANG == "ko_KR.UTF-8" ]; then
         echo -e "\e[0;1m업데이트된 기능\e[m" >> $releasePath/releasenote.txt
     else
@@ -59,9 +55,7 @@ else
     echo "" >> $releasePath/releasenote.txt
 fi
 
-if [ -z "$(git log -1 --grep="DELETE" --no-merges --pretty=format:"%h" $updatedCommit...$beforeCommit)" ]; then
-    echo "" > /dev/null
-else
+if ! [ -z "$(git log -1 --grep="DELETE" --no-merges --pretty=format:"%h" $updatedCommit...$beforeCommit)" ]; then
     if [ $LANG == "ko_KR.UTF-8" ]; then
         echo -e "\e[0;1m삭제된 기능\e[m" >> $releasePath/releasenote.txt
     else
@@ -72,9 +66,7 @@ else
 fi
 
 if [ "$(git branch | sed '/* /!d'| sed 's/* //g')" == "nightly" ]; then
-    if [ -z "$(git log -1 --grep="TEST" --no-merges --pretty=format:"%h" $updatedCommit...$beforeCommit)" ]; then
-        echo "" > /dev/null
-    else
+    if ! [ -z "$(git log -1 --grep="TEST" --no-merges --pretty=format:"%h" $updatedCommit...$beforeCommit)" ]; then
         if [ $LANG == "ko_KR.UTF-8" ]; then
             echo -e "\e[0;1m실험중인 기능\e[m" >> $releasePath/releasenote.txt
         else

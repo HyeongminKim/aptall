@@ -34,9 +34,7 @@ function checkVersion() {
 }
 
 if [ "$1" == "install" ]; then
-    if [ -r /etc/aptall/initializationed ]; then
-        echo "" > /dev/null
-    else
+    if [ ! -r /etc/aptall/initializationed ]; then
         checkVersion
         curl -fsSkL https://raw.githubusercontent.com/HyeongminKim/aptall/master/LICENSE
         if [ $LANG == "ko_KR.UTF-8" ]; then
@@ -64,9 +62,7 @@ if [ "$1" == "install" ]; then
         fi
     fi
 
-    if [ -d $debugPath ]; then
-        echo "" > /dev/null
-    else
+    if [ ! -d $debugPath ]; then
         sudo mkdir /var/log/aptall 
         sudo chown -R $(whoami) /var/log/aptall
         if [ $LANG == "ko_KR.UTF-8" ]; then
