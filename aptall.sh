@@ -159,9 +159,24 @@ function extensionVerification {
             if [ -r $debugPath/extension.sh.bak ]; then
                 cat $executePath/tools/extension.sh > $debugPath/extension.txt
                 cat $debugPath/extension.sh.bak > $debugPath/extension_bak.txt
-                git diff --no-index $debugPath/extension_bak.txt $debugPath/extension.txt
-
-                rm $debugPath/extension.txt $debugPath/extension_bak.txt
+                if [ -r $debugPath/extension.txt -a -r $debugPath/extension_bak.txt ]; then
+                    git diff --no-index $debugPath/extension_bak.txt $debugPath/extension.txt 2> /dev/null
+                    if [ $? != 0 ]; then
+                        if [ $LANG == "ko_KR.UTF-8" ]; then
+                            echo "향상된 diff를 사용할 수 없어 레거시 diff로 대체됩니다."
+                        else
+                            echo "Enhanced diff is not available and is replaced by legacy diff."
+                        fi
+                        diff $debugPath/extension_bak.txt $debugPath/extension.txt
+                    fi
+                    rm $debugPath/extension.txt $debugPath/extension_bak.txt
+                else
+                    if [ $LANG == "ko_KR.UTF-8" ]; then
+                        echo "필수 비교 파일에 접근할 수 없습니다. 파일 권한 설정을 확인하세요. "
+                    else
+                        echo "The required comparison file could not be accessed. Check the file permission settings."
+                    fi
+                fi
             else
                 less $executePath/tools/extension.sh
             fi
