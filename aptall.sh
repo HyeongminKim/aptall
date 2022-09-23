@@ -19,7 +19,7 @@ if [ "$1" == "version" ]; then
     echo ""
     git --version
     exit 0
-elif [ "$1" == "runtime" ]; then 
+elif [ "$1" == "runtime" ]; then
     if [ -r $debugPath/aptall_initiated.log ]; then
         cat $debugPath/aptall_initiated.log 2> /dev/null
     fi
@@ -30,6 +30,12 @@ elif [ "$1" == "changelog" ]; then
         updatedRevision="$(cat $debugPath/updatedRevision.txt)"
 
         "$executePath/tools/changelog.sh" "$cntRevision" "$updatedRevision"
+    else
+        if [ $LANG == "ko_KR.UTF-8" ]; then
+            echo "아직 한번도 업데이트를 받은 적이 없기 때문에 표시할 내용이 없는 것 같습니다."
+        else
+            echo "There is nothing to display because it has never received an update yet."
+        fi
     fi
     exit 0
 elif [ "$1" == "remove" ]; then
