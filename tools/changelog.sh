@@ -3,7 +3,7 @@
 beforeCommit="$1"
 updatedCommit="$2"
 executePath=$(echo $0 | sed "s/\/tools\/changelog.sh//g")
-cntBranch=$(git branch | sed '/* /!d'| sed 's/* //g')
+cntBranch=$(git branch --show-current)
 releasePath=/var/log/aptall
 
 cd $executePath
@@ -65,7 +65,7 @@ if ! [ -z "$(git log -1 --grep="DELETE" --no-merges --pretty=format:"%h" $update
     echo "" >> $releasePath/releasenote.txt
 fi
 
-if [ "$(git branch | sed '/* /!d'| sed 's/* //g')" == "nightly" ]; then
+if [ "$cntBranch" == "nightly" ]; then
     if ! [ -z "$(git log -1 --grep="TEST" --no-merges --pretty=format:"%h" $updatedCommit...$beforeCommit)" ]; then
         if [ $LANG == "ko_KR.UTF-8" ]; then
             echo -e "\e[0;1m실험중인 기능\e[m" >> $releasePath/releasenote.txt
