@@ -52,8 +52,24 @@ if [ "$1" == "install" ]; then
             exit 1
         fi
 
-        sudo mkdir /etc/aptall 
-        sudo chown -R $(whoami) /etc/aptall
+        if [ $(id -u) -eq 0 ]; then
+            if [ $LANG == "ko_KR.UTF-8" ]; then
+                echo -en "root 권한으로 설치할 경우 예기치 않은 문제가 발생할 수 있습니다. \n 계속하시겠습니까? (y/N) > "
+            else
+                echo -en "Unexpected problems may occur if you install with root privileges. \n Are you sure you want to continue? (y/N) > "
+            fi
+        fi
+        read n
+        if [ ! "$n" == "y" -o "$n" == "Y" ]; then
+            exit 1
+        fi
+
+        if [ $(id -u) -ne 0 ]; then
+            sudo mkdir /etc/aptall
+            sudo chown -R $(whoami) /etc/aptall
+        else
+            mkdir /etc/aptall
+        fi
         touch /etc/aptall/initializationed
         if [ $LANG == "ko_KR.UTF-8" ]; then
             echo -e "aptall 설정 폴더를 생성하였습니다. 설정 폴더는 \e[0;1m/etc/aptall/initializationed\e[m에 위치할 것입니다. "
@@ -63,8 +79,12 @@ if [ "$1" == "install" ]; then
     fi
 
     if [ ! -d $debugPath ]; then
-        sudo mkdir /var/log/aptall 
-        sudo chown -R $(whoami) /var/log/aptall
+        if [ $(id -u) -ne 0 ]; then
+            sudo mkdir /var/log/aptall
+            sudo chown -R $(whoami) /var/log/aptall
+        else
+            mkdir /var/log/aptall
+        fi
         if [ $LANG == "ko_KR.UTF-8" ]; then
             echo -e "aptall 로그 폴더를 생성하였습니다. 모든 로그 파일들은 \e[0;1m$debugPath\e[m에 위치할 것입니다. "
         else

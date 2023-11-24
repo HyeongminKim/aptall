@@ -122,6 +122,14 @@ function compareTime() {
 }
 
 function executeExtension() {
+    if [ $(id -u) -eq 0 ]; then
+        if [ $LANG == "ko_KR.UTF-8" ]; then
+            echo "root 권한으로는 추가 명령을 실행할 수 없습니다."
+        else
+            echo "Additional commands cannot be executed with root privileges."
+        fi
+        return 1
+    fi
     if [ -r $debugPath/extension.csm ]; then
         shasum -a 256 $executePath/tools/extension.sh > $debugPath/extension_src.csm
         diff $debugPath/extension.csm $debugPath/extension_src.csm > /dev/null
@@ -264,25 +272,31 @@ else
     echo -e "\e[32mInitiated time: $(date)\e[m"
 fi
 
-if [ $LANG == "ko_KR.UTF-8" ]; then
-    echo "스크립트를 계속 진행하려면 관리자 암호가 필요합니다. "
-else
-    echo "An admin password is required to proceed with the script. "
-fi
-sudo echo "" &> /dev/null
-if [ $? != 0 ]; then
+if [ $(id -u) -ne 0 ]; then
     if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo -e "\e[31m로그인에 실패하였습니다. 잠시후 다시 시도하세요. \e[m"
-        echo "[31m[실패][0m " >> $debugPath/aptall_initiated.log
+        echo "스크립트를 계속 진행하려면 관리자 암호가 필요합니다. "
     else
-        echo -e "\e[31mlogin failed. Please try again later.\e[m"
-        echo "[31m[FAILED][0m " >> $debugPath/aptall_initiated.log
+        echo "An admin password is required to proceed with the script. "
     fi
-    rm $debugPath/aptall.lock
-    exit 1
+    sudo echo "" &> /dev/null
+    if [ $? != 0 ]; then
+        if [ $LANG == "ko_KR.UTF-8" ]; then
+            echo -e "\e[31m로그인에 실패하였습니다. 잠시후 다시 시도하세요. \e[m"
+            echo "[31m[실패][0m " >> $debugPath/aptall_initiated.log
+        else
+            echo -e "\e[31mlogin failed. Please try again later.\e[m"
+            echo "[31m[FAILED][0m " >> $debugPath/aptall_initiated.log
+        fi
+        rm $debugPath/aptall.lock
+        exit 1
+    fi
 fi
 
-sudo apt update 2> $debugPath/apt_update_debug.log
+if [ $(id -u) -ne 0 ]; then
+    sudo apt update 2> $debugPath/apt_update_debug.log
+else
+    apt update 2> $debugPath/apt_update_debug.log
+fi
 if [ "$?" != "0" ]; then
     update=true
     cat $debugPath/apt_update_debug.log
@@ -295,7 +309,11 @@ if [ "$USE_FULL_UPGRADE" == "true" -o "$USE_FULL_UPGRADE" == "TRUE" ]; then
     else
         echo -e "\e[33mIf you use this option, your device may run out of storage space.\e[m"
     fi
-    sudo apt full-upgrade 2> $debugPath/apt_upgrade_debug.log
+    if [ $(id -u) -ne 0 ]; then
+        sudo apt full-upgrade 2> $debugPath/apt_upgrade_debug.log
+    else
+        apt full-upgrade 2> $debugPath/apt_upgrade_debug.log
+    fi
     if [ "$?" != "0" ]; then
         upgrade=true
         cat $debugPath/apt_upgrade_debug.log
@@ -303,7 +321,11 @@ if [ "$USE_FULL_UPGRADE" == "true" -o "$USE_FULL_UPGRADE" == "TRUE" ]; then
         rm $debugPath/apt_upgrade_debug.log
     fi
 else
-    sudo apt -y upgrade 2> $debugPath/apt_upgrade_debug.log
+    if [ $(id -u) -ne 0 ]; then
+        sudo apt -y upgrade 2> $debugPath/apt_upgrade_debug.log
+    else
+        apt -y upgrade 2> $debugPath/apt_upgrade_debug.log
+    fi
     if [ "$?" != "0" ]; then
         upgrade=true
         cat $debugPath/apt_upgrade_debug.log
@@ -312,7 +334,11 @@ else
     fi
 fi
 
-sudo apt -y autoremove 2> $debugPath/apt_autoremove_debug.log
+if [ $(id -u) -ne 0 ]; then
+    sudo apt -y autoremove 2> $debugPath/apt_autoremove_debug.log
+else
+    apt -y autoremove 2> $debugPath/apt_autoremove_debug.log
+fi
 if [ "$?" != "0" ]; then
     cleanup=true
     cat $debugPath/apt_autoremove_debug.log
@@ -360,15 +386,13 @@ if [ "$update" = true -o "$upgrade" = true -o "$cleanup" = true -o "$doctor" = t
         if [ $? != 0 ]; then
             if [ $LANG == "ko_KR.UTF-8" ]; then
                 echo -e "\e[31m익스텐션을 로드하는 도중 에러가 발생하였습니다. \e[m"
-                echo "[31m[실패][0m " >> $debugPath/aptall_initiated.log
             else
                 echo -e "\e[31mAn error occurred while loading the extension.\e[m"
-                echo "[31m[FAILED][0m " >> $debugPath/aptall_initiated.log
             fi
         fi
-    else
+    elif [ $(id -u) -ne 0 ]; then
         if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "추가 명령을 실행하고 싶으시면 extension.sh 파일을 \e[0;1m$executePath/tools\e[m 디렉토리 안에 두심시오. "
+            echo -e "추가 명령을 실행하고 싶으시면 extension.sh 파일을 \e[0;1m$executePath/tools\e[m 디렉토리 안에 두십시오. "
         else
             echo -e "If you want to run additional commands, place the extension.sh file in the \e[0;1m$executePath/tools\e[m directory."
         fi
@@ -427,10 +451,12 @@ else
             exit 1
         fi
     else
-        if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "추가 명령을 실행하고 싶으시면 extension.sh 파일을 \e[0;1m$executePath/tools\e[m 디렉토리 안에 두심시오. "
-        else
-            echo -e "If you want to run additional commands, place the extension.sh file in the \e[0;1m$executePath/tools\e[m directory."
+        if [ $(id -u) -ne 0 ]; then
+            if [ $LANG == "ko_KR.UTF-8" ]; then
+                echo -e "추가 명령을 실행하고 싶으시면 extension.sh 파일을 \e[0;1m$executePath/tools\e[m 디렉토리 안에 두심시오. "
+            else
+                echo -e "If you want to run additional commands, place the extension.sh file in the \e[0;1m$executePath/tools\e[m directory."
+            fi
         fi
         if [ $LANG == "ko_KR.UTF-8" ]; then
             echo "[34m[성공][0m " >> $debugPath/aptall_initiated.log

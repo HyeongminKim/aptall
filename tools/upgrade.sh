@@ -11,8 +11,12 @@ cd $executePath
 function showCommit() {
     releasePath=/var/log/aptall
     if [ ! -d $releasePath ]; then
-        sudo mkdir /var/log/aptall
-        sudo chown -R $(whoami) /var/log/aptall
+        if [ $(id -u) -ne 0 ]; then
+            sudo mkdir /var/log/aptall
+            sudo chown -R $(whoami) /var/log/aptall
+        else
+            mkdir /var/log/aptall
+        fi
         dirCreated=true
     fi
 
