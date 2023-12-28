@@ -322,9 +322,9 @@ if [ "$USE_FULL_UPGRADE" == "true" -o "$USE_FULL_UPGRADE" == "TRUE" ]; then
     fi
 else
     if [ $(id -u) -ne 0 ]; then
-        sudo apt -y upgrade 2> $debugPath/apt_upgrade_debug.log
+        sudo apt upgrade -y 2> $debugPath/apt_upgrade_debug.log
     else
-        apt -y upgrade 2> $debugPath/apt_upgrade_debug.log
+        apt upgrade -y 2> $debugPath/apt_upgrade_debug.log
     fi
     if [ "$?" != "0" ]; then
         upgrade=true
@@ -335,9 +335,9 @@ else
 fi
 
 if [ $(id -u) -ne 0 ]; then
-    sudo apt -y autoremove 2> $debugPath/apt_autoremove_debug.log
+    sudo apt autoremove -y 2> $debugPath/apt_autoremove_debug.log
 else
-    apt -y autoremove 2> $debugPath/apt_autoremove_debug.log
+    apt autoremove -y 2> $debugPath/apt_autoremove_debug.log
 fi
 if [ "$?" != "0" ]; then
     cleanup=true
