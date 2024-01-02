@@ -12,7 +12,7 @@ cd $executePath
 
 if [ "$1" == "version" ]; then
     echo -e "aptall (git revision $(git rev-parse --short HEAD), last commit $(git log -1 --date=format:"%Y-%m-%d" --format="%ad"), $(git branch --show-current) build)"
-    echo -e "Copyright (c) 2021-2023 Hyeongmin Kim\n"
+    echo -e "Copyright (c) 2021-$(date +%Y) Hyeongmin Kim\n"
     bash --version
     echo ""
     apt --version
