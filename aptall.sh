@@ -7,15 +7,35 @@ cleanup=false
 doctor=false
 elapsedTime=
 executePath=$(echo $0 | sed "s/\/aptall.sh//g")
+supportPackage=
 
 cd $executePath
+
+which apt &> /dev/null
+if [ $? == 0 ]; then
+    supportPackage=/usr/bin/apt
+fi
+
+which yum &> /dev/null
+if [ $? == 0 ]; then
+    supportPackage=/usr/bin/yum
+fi
+
+if [ -z $supportPackage ]; then
+    if [ $LANG == "ko_KR.UTF-8" ]; then
+        echo "이 시스템은 아직 지원하지 않습니다."
+    else
+        echo "This system is not yet supported."
+    fi
+    exit 1
+fi
 
 if [ "$1" == "version" ]; then
     echo -e "aptall (git revision $(git rev-parse --short HEAD), last commit $(git log -1 --date=format:"%Y-%m-%d" --format="%ad"), $(git branch --show-current) build)"
     echo -e "Copyright (c) 2021-$(date +%Y) Hyeongmin Kim\n"
     bash --version
     echo ""
-    apt --version
+    $supportPackage --version
     echo ""
     git --version
     exit 0
@@ -293,9 +313,9 @@ if [ $(id -u) -ne 0 ]; then
 fi
 
 if [ $(id -u) -ne 0 ]; then
-    sudo apt update 2> $debugPath/apt_update_debug.log
+    sudo $supportPackage update 2> $debugPath/apt_update_debug.log
 else
-    apt update 2> $debugPath/apt_update_debug.log
+    $supportPackage update 2> $debugPath/apt_update_debug.log
 fi
 if [ "$?" != "0" ]; then
     update=true
@@ -310,9 +330,9 @@ if [ "$USE_FULL_UPGRADE" == "true" -o "$USE_FULL_UPGRADE" == "TRUE" ]; then
         echo -e "\e[33mIf you use this option, your device may run out of storage space.\e[m"
     fi
     if [ $(id -u) -ne 0 ]; then
-        sudo apt full-upgrade 2> $debugPath/apt_upgrade_debug.log
+        sudo $supportPackage full-upgrade 2> $debugPath/apt_upgrade_debug.log
     else
-        apt full-upgrade 2> $debugPath/apt_upgrade_debug.log
+        $supportPackage full-upgrade 2> $debugPath/apt_upgrade_debug.log
     fi
     if [ "$?" != "0" ]; then
         upgrade=true
@@ -322,9 +342,9 @@ if [ "$USE_FULL_UPGRADE" == "true" -o "$USE_FULL_UPGRADE" == "TRUE" ]; then
     fi
 else
     if [ $(id -u) -ne 0 ]; then
-        sudo apt upgrade -y 2> $debugPath/apt_upgrade_debug.log
+        sudo $supportPackage upgrade -y 2> $debugPath/apt_upgrade_debug.log
     else
-        apt upgrade -y 2> $debugPath/apt_upgrade_debug.log
+        $supportPackage upgrade -y 2> $debugPath/apt_upgrade_debug.log
     fi
     if [ "$?" != "0" ]; then
         upgrade=true
@@ -335,9 +355,9 @@ else
 fi
 
 if [ $(id -u) -ne 0 ]; then
-    sudo apt autoremove -y 2> $debugPath/apt_autoremove_debug.log
+    sudo $supportPackage autoremove -y 2> $debugPath/apt_autoremove_debug.log
 else
-    apt autoremove -y 2> $debugPath/apt_autoremove_debug.log
+    $supportPackage autoremove -y 2> $debugPath/apt_autoremove_debug.log
 fi
 if [ "$?" != "0" ]; then
     cleanup=true
