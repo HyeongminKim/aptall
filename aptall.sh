@@ -96,14 +96,14 @@ fi
 function calcTime() {
     willConvertStartSecond=$1
     willConvertEndSecond=$2
-    calculatedElapsedSecond=$(($willConvertStartSecond-$willConvertEndSecond))
+    calculatedElapsedSecond=$(expr $willConvertStartSecond - $willConvertEndSecond)
     elapsedTime=$calculatedElapsedSecond
-    resultCalculatedHour=$(($calculatedElapsedSecond/3600))
-    calculatedElapsedSecond=$(($calculatedElapsedSecond%3600))
-    resultCalculatedMin=$(($calculatedElapsedSecond/60))
-    calculatedElapsedSecond=$(($calculatedElapsedSecond%60))
-    resultCalculatedSec=$calculatedElapsedSecond
-    echo -n "$resultCalculatedHour°$resultCalculatedMin'$resultCalculatedSec\" "
+    Hour=$(expr $calculatedElapsedSecond / 3600)
+    calculatedElapsedSecond=$(expr $calculatedElapsedSecond % 3600)
+    Min=$(expr $calculatedElapsedSecond / 60)
+    calculatedElapsedSecond=$(expr $calculatedElapsedSecond % 60)
+    Sec=$calculatedElapsedSecond
+    echo -n "$Hour°$Min'$Sec\" "
 }
 
 function compareTime() {
@@ -111,14 +111,14 @@ function compareTime() {
     if [ -r $debugPath/ElapsedTime.txt ]; then
         previousElapsedTime=$(cat $debugPath/ElapsedTime.txt 2> /dev/null)
         if [ $previousElapsedTime -gt $currentElapsedTime ]; then
-            result=$(($previousElapsedTime-$currentElapsedTime))
+            result=$(expr $previousElapsedTime - $currentElapsedTime)
             if [ $LANG == "ko_KR.UTF-8" ]; then
                 echo -e "\e[34m▼ $result 초\e[m"
             else
                 echo -e "\e[31m▼ $result sec\e[m"
             fi
         elif [ $previousElapsedTime -lt $currentElapsedTime ]; then
-            result=$(($currentElapsedTime-$previousElapsedTime))
+            result=$(expr $currentElapsedTime - $previousElapsedTime)
             if [ $LANG == "ko_KR.UTF-8" ]; then
                 echo -e "\e[31m▲ $result 초\e[m"
             else
