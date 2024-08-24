@@ -42,6 +42,11 @@ if [ "$1" == "version" ]; then
 elif [ "$1" == "runtime" ]; then
     if [ -r $debugPath/aptall_initiated.log ]; then
         cat $debugPath/aptall_initiated.log 2> /dev/null
+        if [ $LANG == "ko_KR.UTF-8" ]; then
+            echo -e "\e[32m현재 시간: $(date)\e[m"
+        else
+            echo -e "\e[32m  Current time: $(date)\e[m"
+        fi
     fi
     exit 0
 elif [ "$1" == "changelog" ]; then
