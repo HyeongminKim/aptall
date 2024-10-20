@@ -329,7 +329,7 @@ if [ "$?" != "0" ]; then
 else
     rm $debugPath/apt_update_debug.log
 fi
-if [ "$USE_FULL_UPGRADE" == "true" -o "$USE_FULL_UPGRADE" == "TRUE" -a "$supportPackage" != "/usr/bin/yum" ]; then
+if [ \( "$USE_FULL_UPGRADE" == "true" -o "$USE_FULL_UPGRADE" == "TRUE" \) -a "$supportPackage" != "/usr/bin/yum" ]; then
     if [ $LANG == "ko_KR.UTF-8" ]; then
         echo -e "\e[33m이 옵션을 사용할 경우 디바이스 저장공간이 부족할 수 있습니다. \e[m"
     else
