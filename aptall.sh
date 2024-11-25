@@ -77,16 +77,8 @@ elif [ "$1" == "remove" ]; then
 elif [ x$1 == x ]; then
     echo "" > /dev/null 2>&1
 elif [ "$1" == "help" ]; then
-   xdg-open https://github.com/HyeongminKim/aptall\#usage-aptallsh-command 2> /dev/null
-    if [ $? != 0 ]; then
-        echo "URL: https://github.com/HyeongminKim/aptall#usage-aptallsh-command"
-        curl -fsSL https://raw.githubusercontent.com/HyeongminKim/aptall/nightly/README.md\#usage-aptallsh-command | awk '/### Usage: aptall.sh/,/### Update channels/' | grep -v 'Update' | sed 's/\\//g'
-    fi
-    if [ $LANG == "ko_KR.UTF-8" ]; then
-        echo "사용법: $0 [명령]"
-    else
-        echo "USAGE: $0 [COMMAND]"
-    fi
+    echo "URL: https://github.com/HyeongminKim/aptall#usage-aptallsh-command"
+    curl -fsSL https://raw.githubusercontent.com/HyeongminKim/aptall/nightly/README.md\#usage-aptallsh-command | awk '/### Usage: aptall.sh/,/### Update channels/' | grep -v 'Update' | sed 's/\\//g'
     exit 0
 else
     if [ $LANG == "ko_KR.UTF-8" ]; then
