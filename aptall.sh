@@ -8,6 +8,7 @@ doctor=false
 elapsedTime=
 executePath=$(echo $0 | sed "s/\/aptall.sh//g")
 supportPackage=
+altPackage=$(which yay 2> /dev/null)
 
 cd $executePath
 
@@ -41,6 +42,9 @@ if [ "$1" == "version" ]; then
     bash --version
     echo ""
     $supportPackage --version
+    if [ "$supportPackage" == "/usr/bin/pacman" ]; then
+        $altPackage --version
+    fi
     echo ""
     git --version
     exit 0
@@ -298,7 +302,6 @@ else
 fi
 
 if [ $supportPackage == "/usr/bin/pacman" ]; then
-    altPackage=$(which yay 2> /dev/null)
     if [ \( "$USE_FULL_UPGRADE" == "true" -o "$USE_FULL_UPGRADE" == "TRUE" \) -a "$altPackage" == "/usr/bin/yay" ]; then
         if [ $LANG == "ko_KR.UTF-8" ]; then
             echo -e "\e[33m이 옵션을 사용할 경우 디바이스 저장공간이 부족할 수 있습니다. \e[m"
