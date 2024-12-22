@@ -66,33 +66,50 @@ if [ "$1" == "install" ]; then
 
         if [ $(id -u) -ne 0 ]; then
             sudo mkdir /etc/aptall
-            sudo chown -R $(whoami) /etc/aptall
+            sudo chown $(whoami) /etc/aptall
         else
             mkdir /etc/aptall
         fi
         touch /etc/aptall/initializationed
-        if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "aptall 설정 폴더를 생성하였습니다. 설정 폴더는 \e[0;1m/etc/aptall/initializationed\e[m에 위치할 것입니다. "
+        if [ -r /etc/aptall/initializationed ]; then
+            if [ $LANG == "ko_KR.UTF-8" ]; then
+                echo -e "aptall 설정 폴더를 생성하였습니다. 설정 폴더는 \e[0;1m/etc/aptall/initializationed\e[m에 위치할 것입니다. "
+            else
+                echo -e "aptall config folder created. This config folder path is \e[0;1m/etc/aptall/initializationed\e[m"
+            fi
         else
-            echo -e "aptall config folder created. This config folder path is \e[0;1m/etc/aptall/initializationed\e[m"
+            if [ $LANG == "ko_KR.UTF-8" ]; then
+                echo -e "aptall 설정 폴더 생성에 실패했습니다. 설정 폴더 \e[0;1m/etc/aptall\e[m 디렉토리 권한을 확인해 주세요. "
+            else
+                echo -e "unable to create aptall config folder. Please check \e[0;1m/etc/aptall/initializationed\e[m permission."
+            fi
         fi
     fi
 
     if [ ! -d $debugPath ]; then
         if [ $(id -u) -ne 0 ]; then
             sudo mkdir /var/log/aptall
-            sudo chown -R $(whoami) /var/log/aptall
+            sudo chown $(whoami) /var/log/aptall
         else
             mkdir /var/log/aptall
         fi
-        if [ $LANG == "ko_KR.UTF-8" ]; then
-            echo -e "aptall 로그 폴더를 생성하였습니다. 모든 로그 파일들은 \e[0;1m$debugPath\e[m에 위치할 것입니다. "
+        if [ -d $debugPath ]; then
+            if [ $LANG == "ko_KR.UTF-8" ]; then
+                echo -e "aptall 로그 폴더를 생성하였습니다. 모든 로그 파일들은 \e[0;1m$debugPath\e[m에 위치할 것입니다. "
+            else
+                echo -e "aptall log folder created. All logs file are located in \e[0;1m$debugPath\e[m"
+            fi
         else
-            echo -e "aptall log folder created. All logs file are located in \e[0;1m$debugPath\e[m"
+            if [ $LANG == "ko_KR.UTF-8" ]; then
+                echo -e "aptall 로그 폴더 생성에 실패했습니다. 로그 폴더 \e[0;1m$debugPath\e[m 디렉토리 권한을 확인해 주세요. "
+            else
+                echo -e "unable to create aptall log folder. Please check \e[0;1m$debugPath\e[m permission."
+            fi
         fi
     fi
 elif [ "$1" == "uninstall" ]; then
     if [ -w $debugPath ]; then
         rm -rf $debugPath
+        rm -rf /etc/aptall
     fi
 fi

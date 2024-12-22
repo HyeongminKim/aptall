@@ -204,14 +204,6 @@ function extensionVerification {
                 cat $debugPath/extension.sh.bak > $debugPath/extension_bak.txt
                 if [ -r $debugPath/extension.txt -a -r $debugPath/extension_bak.txt ]; then
                     git diff --no-index $debugPath/extension_bak.txt $debugPath/extension.txt 2> /dev/null
-                    if [ $? != 0 ]; then
-                        if [ $LANG == "ko_KR.UTF-8" ]; then
-                            echo "향상된 diff를 사용할 수 없어 레거시 diff로 대체됩니다."
-                        else
-                            echo "Enhanced diff is not available and is replaced by legacy diff."
-                        fi
-                        diff $debugPath/extension_bak.txt $debugPath/extension.txt
-                    fi
                     rm $debugPath/extension.txt $debugPath/extension_bak.txt
                 else
                     if [ $LANG == "ko_KR.UTF-8" ]; then
@@ -277,7 +269,7 @@ fi
 if [ -x $executePath/tools/install.sh ]; then
     "$executePath/tools/install.sh" "install"
     if [ $? != 0 ]; then
-        rm $debugPath/aptall.lock
+        rm $debugPath/aptall.lock &> /dev/null
         exit $?
     fi
 else
@@ -286,7 +278,7 @@ else
     else
         echo -e "\e[31mExit because it is not possible to check whether the settings and log folder exist.\e[m"
     fi
-    rm $debugPath/aptall.lock
+    rm $debugPath/aptall.lock &> /dev/null
     exit 1
 fi
 
@@ -330,7 +322,7 @@ if [ $supportPackage == "/usr/bin/pacman" ]; then
                 echo -e "\e[31mlogin failed. Please try again later.\e[m"
                 echo "[31m[FAILED][0m " >> $debugPath/aptall_initiated.log
             fi
-            rm $debugPath/aptall.lock
+            rm $debugPath/aptall.lock &> /dev/null
             exit 1
         fi
 
@@ -362,7 +354,7 @@ else
                 echo -e "\e[31mlogin failed. Please try again later.\e[m"
                 echo "[31m[FAILED][0m " >> $debugPath/aptall_initiated.log
             fi
-            rm $debugPath/aptall.lock
+            rm $debugPath/aptall.lock &> /dev/null
             exit 1
         fi
     fi
@@ -481,7 +473,7 @@ if [ "$update" = true -o "$upgrade" = true -o "$cleanup" = true -o "$doctor" = t
     fi
     calcTime $endTime $startTime
     compareTime
-    rm $debugPath/aptall.lock
+    rm $debugPath/aptall.lock &> /dev/null
     exit 1
 else
     if [ $LANG == "ko_KR.UTF-8" ]; then
@@ -505,7 +497,7 @@ else
             fi
             calcTime $endTime $startTime
             compareTime
-            rm $debugPath/aptall.lock
+            rm $debugPath/aptall.lock &> /dev/null
             exit 0
         else
             if [ $LANG == "ko_KR.UTF-8" ]; then
@@ -523,7 +515,7 @@ else
             fi
             calcTime $endTime $startTime
             compareTime
-            rm $debugPath/aptall.lock
+            rm $debugPath/aptall.lock &> /dev/null
             exit 1
         fi
     else
@@ -547,7 +539,7 @@ else
         fi
         calcTime $endTime $startTime
         compareTime
-        rm $debugPath/aptall.lock
+        rm $debugPath/aptall.lock &> /dev/null
         exit 0
     fi
 fi
